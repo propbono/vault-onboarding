@@ -2,26 +2,79 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  color: var(--foreground);
-  background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+
+@layer base {
+  :root {
+    --background: var(--base-white);
+    --foreground: var(--base-black);
+    --card: var(--base-white);
+    --card-foreground: var(--base-black);
+    --popover: var(--base-white);
+    --popover-foreground: var(--base-black);
+    --primary: var(--green-500);
+    --primary-foreground: var(--base-white);
+    --secondary: var(--gray-50);
+    --secondary-foreground: var(--base-black);
+    --muted: var(--gray-50);
+    --muted-foreground: var(--gray-300);
+    --accent: var(--gray-50);
+    --accent-foreground: var(--base-black);
+    --destructive: var(--red-500);
+    --destructive-foreground: var(--base-white);
+    --border: var(--gray-100);
+    --input: var(--gray-100);
+    --ring: var(--green-500);
+    --radius: 0.5rem;
+    --chart-1: var(--chart-orange);
+    --chart-2: var(--chart-teal);
+    --chart-3: var(--chart-navy);
+    --chart-4: var(--chart-yellow);
+    --chart-5: var(--chart-coral);
+  }
+
+  .dark {
+    --background: var(--base-black);
+    --foreground: var(--base-white);
+    --card: var(--gray-800);
+    --card-foreground: var(--base-white);
+    --popover: var(--gray-900);
+    --popover-foreground: var(--base-white);
+    --primary: var(--green-600);
+    --primary-foreground: var(--green-900);
+    --secondary: var(--gray-800);
+    --secondary-foreground: var(--base-white);
+    --muted: var(--gray-800);
+    --muted-foreground: var(--gray-200);
+    --accent: var(--gray-800);
+    --accent-foreground: var(--base-white);
+    --destructive: var(--red-700);
+    --destructive-foreground: var(--base-white);
+    --border: var(--gray-800);
+    --input: var(--gray-800);
+    --ring: var(--green-700);
+    --chart-1: var(--chart-blue);
+    --chart-2: var(--chart-forest);
+    --chart-3: var(--chart-amber);
+    --chart-4: var(--chart-purple);
+    --chart-5: var(--chart-pink);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
