@@ -27,6 +27,7 @@ export const OnboardingForm = () => {
       phoneNumber: '+1',
       corporationNumber: '',
     },
+    mode: 'onBlur',
   })
 
   const onSubmit = (data: OnboardingFormData) => {
