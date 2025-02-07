@@ -39,7 +39,9 @@ export const OnboardingForm = () => {
     <div className="container mx-auto">
       <Card className="max-w-lg mx-auto">
         <CardHeader>
-          <CardTitle>Onboarding Form</CardTitle>
+          <CardTitle className="text-center font-bold text-2xl">
+            Onboarding Form
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
