@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import '../styles/tokens.css';
 
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -11,7 +12,6 @@ body {
     text-wrap: balance;
   }
 }
-
 
 @layer base {
   :root {
@@ -27,7 +27,7 @@ body {
     --secondary-foreground: var(--base-black);
     --muted: var(--gray-50);
     --muted-foreground: var(--gray-300);
-    --accent: var(--gray-50);
+    --accent: var(--green-700);
     --accent-foreground: var(--base-black);
     --destructive: var(--red-500);
     --destructive-foreground: var(--base-white);
@@ -40,6 +40,9 @@ body {
     --chart-3: var(--chart-navy);
     --chart-4: var(--chart-yellow);
     --chart-5: var(--chart-coral);
+    --gradient-start-light: var(--base-white);
+    --gradient-middle-light: var(--gray-100);
+    --gradient-end-light: var(--gray-200);
   }
 
   .dark {
@@ -55,7 +58,7 @@ body {
     --secondary-foreground: var(--base-white);
     --muted: var(--gray-800);
     --muted-foreground: var(--gray-200);
-    --accent: var(--gray-800);
+    --accent: var(--green-700);
     --accent-foreground: var(--base-white);
     --destructive: var(--red-700);
     --destructive-foreground: var(--base-white);
@@ -67,6 +70,10 @@ body {
     --chart-3: var(--chart-amber);
     --chart-4: var(--chart-purple);
     --chart-5: var(--chart-pink);
+
+    --gradient-start-dark: var(--gray-300);
+    --gradient-middle-dark: var(--gray-200);
+    --gradient-end-dark: var(--gray-100);
   }
 }
 
