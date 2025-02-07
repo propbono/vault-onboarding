@@ -4,8 +4,8 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-light dark:bg-gradient-dark">
-      <div className="flex flex-col items-center px-6 md:px-8 max-w-2xl mx-auto text-center">
+    <main className="min-h-screen flex items-center justify-center bg-gradient-light dark:bg-gradient-dark px-6 md:px-8 mx-auto">
+      <div className="flex flex-col items-center max-w-2xl  text-center">
         <div className="mb-8">
           <Logo width={128} height={32} />
         </div>
