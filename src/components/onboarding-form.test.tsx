@@ -2,10 +2,28 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { OnboardingForm } from './onboarding-form'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+
+const createWrapper = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        staleTime: 0,
+      },
+    },
+  })
+
+  const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  )
+  TestWrapper.displayName = 'TestWrapper'
+  return TestWrapper
+}
 
 describe('OnboardingForm', () => {
   it('renders all form fields', () => {
-    render(<OnboardingForm />)
+    render(<OnboardingForm />, { wrapper: createWrapper() })
 
     expect(screen.getByLabelText(/first name/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/last name/i)).toBeInTheDocument()
@@ -15,7 +33,7 @@ describe('OnboardingForm', () => {
   })
 
   it('shows correct default values', () => {
-    render(<OnboardingForm />)
+    render(<OnboardingForm />, { wrapper: createWrapper() })
 
     expect(screen.getByLabelText(/phone number/i)).toHaveValue('+1')
     expect(screen.getByLabelText(/first name/i)).toHaveValue('')
@@ -24,7 +42,7 @@ describe('OnboardingForm', () => {
   })
 
   it('shows validation errors when form submitted empty', async () => {
-    render(<OnboardingForm />)
+    render(<OnboardingForm />, { wrapper: createWrapper() })
 
     const submitButton = screen.getByRole('button', { name: /submit/i })
     fireEvent.click(submitButton)
@@ -40,7 +58,7 @@ describe('OnboardingForm', () => {
   })
 
   it('shows validation errors for empty first name', async () => {
-    render(<OnboardingForm />)
+    render(<OnboardingForm />, { wrapper: createWrapper() })
 
     const firstNameInput = screen.getByLabelText(/first name/i)
 
@@ -52,7 +70,7 @@ describe('OnboardingForm', () => {
   })
 
   it('shows validation errors for empty last name', async () => {
-    render(<OnboardingForm />)
+    render(<OnboardingForm />, { wrapper: createWrapper() })
 
     const lastNameInput = screen.getByLabelText(/last name/i)
 
@@ -65,7 +83,7 @@ describe('OnboardingForm', () => {
 
   it('shows validation errors when first name exceed 50 characters', async () => {
     const user = userEvent.setup()
-    render(<OnboardingForm />)
+    render(<OnboardingForm />, { wrapper: createWrapper() })
 
     const longString = 'a'.repeat(51)
 
@@ -82,7 +100,7 @@ describe('OnboardingForm', () => {
 
   it('shows validation errors when last name exceed 50 characters', async () => {
     const user = userEvent.setup()
-    render(<OnboardingForm />)
+    render(<OnboardingForm />, { wrapper: createWrapper() })
 
     const longString = 'a'.repeat(51)
 
@@ -99,7 +117,7 @@ describe('OnboardingForm', () => {
 
   it('validates phone number format', async () => {
     const user = userEvent.setup()
-    render(<OnboardingForm />)
+    render(<OnboardingForm />, { wrapper: createWrapper() })
 
     const phoneInput = screen.getByLabelText(/phone number/i)
     await user.clear(phoneInput)
@@ -116,7 +134,7 @@ describe('OnboardingForm', () => {
 
   it('validates corporation number format', async () => {
     const user = userEvent.setup()
-    render(<OnboardingForm />)
+    render(<OnboardingForm />, { wrapper: createWrapper() })
 
     const corporationInput = screen.getByLabelText(/corporation number/i)
     await user.type(corporationInput, '12345')
@@ -124,7 +142,9 @@ describe('OnboardingForm', () => {
     fireEvent.blur(corporationInput)
 
     await waitFor(() => {
-      expect(screen.getByText(/must be exactly 9 digits/i)).toBeInTheDocument()
+      expect(
+        screen.getByText(/Invalid corporation number/i)
+      ).toBeInTheDocument()
     })
   })
 
@@ -133,7 +153,7 @@ describe('OnboardingForm', () => {
     const user = userEvent.setup()
     const consoleSpy = vi.spyOn(console, 'log')
 
-    render(<OnboardingForm />)
+    render(<OnboardingForm />, { wrapper: createWrapper() })
 
     await user.type(screen.getByLabelText(/first name/i), 'John')
     await user.type(screen.getByLabelText(/last name/i), 'Doe')
