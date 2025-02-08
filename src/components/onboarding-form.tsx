@@ -17,8 +17,15 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { useEffect, useState } from 'react'
+import { useValidateCorporationNumber } from '@/lib/queries'
 
 export const OnboardingForm = () => {
+  const [corpNumberToValidate, setCorpNumberToValidate] = useState('')
+
+  const { data: validationResult, isLoading: validationIsLoading } =
+    useValidateCorporationNumber(corpNumberToValidate)
+
   const form = useForm<OnboardingFormData>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
@@ -30,10 +37,33 @@ export const OnboardingForm = () => {
     mode: 'onBlur',
   })
 
+  useEffect(() => {
+    if (validationResult) {
+      if (!validationResult.valid) {
+        console.log('validationResult - invalid')
+        form.setError(
+          'corporationNumber',
+          {
+            type: 'manual',
+            message: validationResult.message,
+          },
+          {
+            shouldFocus: true,
+          }
+        )
+      } else {
+        console.log('validationResult - valid')
+        form.clearErrors('corporationNumber')
+      }
+    }
+  }, [validationResult, form])
+
   const onSubmit = (data: OnboardingFormData) => {
     console.log(data)
     // Handle form submission
   }
+
+  console.log('FORM ERRORS', form.formState.errors)
 
   return (
     <div className="container mx-auto">
@@ -54,7 +84,7 @@ export const OnboardingForm = () => {
                   control={form.control}
                   name="firstName"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col w-full">
+                    <FormItem>
                       <FormLabel>First Name</FormLabel>
                       <FormControl>
                         <Input {...field} />
@@ -70,7 +100,7 @@ export const OnboardingForm = () => {
                   control={form.control}
                   name="lastName"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col w-full">
+                    <FormItem>
                       <FormLabel>Last Name</FormLabel>
                       <FormControl>
                         <Input {...field} />
@@ -87,7 +117,7 @@ export const OnboardingForm = () => {
                 control={form.control}
                 name="phoneNumber"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col w-full">
+                  <FormItem>
                     <FormLabel>Phone Number</FormLabel>
                     <FormControl>
                       <Input {...field} />
@@ -99,21 +129,35 @@ export const OnboardingForm = () => {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="corporationNumber"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col w-full">
-                    <FormLabel>Corporation Number</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <div className="h-3">
-                      <FormMessage />
-                    </div>
-                  </FormItem>
+              <div className="relative">
+                <FormField
+                  control={form.control}
+                  name="corporationNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Corporation Number</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          onBlur={() => {
+                            if (field.value) {
+                              setCorpNumberToValidate(field.value)
+                            }
+                          }}
+                        />
+                      </FormControl>
+                      <div className="h-3">
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                {validationIsLoading && (
+                  <div className="absolute right-1/2 top-1/2 -translate-y-1/2">
+                    <span className="animate-spin">⌛</span>
+                  </div>
                 )}
-              />
+              </div>
 
               <Button type="submit" className="w-full">
                 Submit
